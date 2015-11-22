@@ -13,7 +13,7 @@ class Object {
 		if (method_exists($this, $getter)){
 			return $this -> $getter();
 		} else {
-			throw new Exception('Property '. $name .'couldnt be found in object of class '. get_class($this) .'.' );
+			throw new Exception('Property `'. $name .'` couldnt be found in object of class `'. get_class($this) .'`' );
 		}
 	}
 }

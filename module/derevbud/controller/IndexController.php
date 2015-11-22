@@ -11,7 +11,7 @@
 class Derevbud_IndexController extends Base_Controller{
 	function actionIndex(){
         $model = Factory::model('AddUser');
-        $model -> setFields(array('name' => 'S7'));
+        $modelv -> setFields(array('name' => 'S7'));
 
 		$res = $model -> validate();
 		print_r($model -> getErrors());

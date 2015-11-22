@@ -15,7 +15,11 @@ return array(
 		)
     ),
 
+    'system' => array(
+        'errorController'	=> 'Derevbud_ErrorController',
+    ),
+
     'repositories' => array(
-		'User' => System::isProduction() ? 'Derevbud_UserRepository' : 'User_UserRepository',
+		'User' => 'User_UserRepository',
     ),
 );

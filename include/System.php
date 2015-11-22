@@ -45,26 +45,13 @@ class System {
         return $result;
     }
 
-    public static function Exception(Exception $e){
-        ob_end_clean();
-		echo '<pre>';
-		echo $e -> getMessage(), '<br>';
-		echo $e -> getTraceAsString(), '<br>';
-		echo '----------------<br>';
-		$controller = new Derevbud_ErrorController();
-        // TODO: carry controller name, action and module name to config,
-        // it allows us configure controller of which module will be used
-        // $controller = static::app() -> getController('ErrorController');
-         call_user_func_array(array($controller, 'errorHandler'), array($e));
-    }
-
     public static function app($name = null){
         if (empty(static::$cache[ 'application' ])){
-            if (is_null($name)){
-                throw new Exception('Couldnt create app');
+            if (!is_null($name)){
+                static::$cache[ 'application' ] = Factory::application($name.'_Application');
             }
-            static::$cache[ 'application' ] = Factory::application($name.'_Application');
         }
+
         return static::$cache[ 'application' ];
     }
 

@@ -7,9 +7,11 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Derevbud_ErrorController{
-	public function actionIndex(){
-		echo '404';
+class Derevbud_ErrorController extends Base_ErrorController{
+
+	public function actionIndex(Exception $exception){
+		echo $exception -> getCode();
+		echo '<br>404';
 	}
 
     public function errorHandler($exception){

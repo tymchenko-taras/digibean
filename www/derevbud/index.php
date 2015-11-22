@@ -13,5 +13,4 @@ System::modules(array(
     'Derevbud',
 ));
 
-$app = System::app('Derevbud');
-$app -> run();
+System::app('Derevbud') -> run();
