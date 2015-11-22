@@ -56,6 +56,6 @@ class System {
     }
 
 	public static function isProduction(){
-		return 1;
+		return 0;
 	}
 }

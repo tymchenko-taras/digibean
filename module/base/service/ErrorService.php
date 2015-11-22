@@ -1,49 +1,60 @@
 <?php
 class Base_ErrorService extends Base_Service{
-	protected $output = '';
+	protected $exception = null;
+	protected $errorType = null;
 
-    public function handle($exception){
-        $this -> clearOutputBuffer();
-		$this -> logException($exception);
+    public function handle($exception, $errorType){
+		$this -> exception = $exception;
+		$this -> errorType = $errorType;
 
 		if (System::isProduction()){
-			$this -> showPrettyOutput($exception);
+			$this -> logError();
+			$this -> showPrettyOutput();
 		} else {
-			$this -> showRawOutput($exception);
+			$this -> showRawOutput();
 		}
-
-		$this -> shutdown();
-    }
-
-	protected function tryToShowPageAnyway(){
-		return (error_reporting() === 0);
 	}
 
-	protected function logException($exception){
+
+	protected function isCritical(){
+		return !in_array($this -> errorType, array(E_USER_NOTICE, E_NOTICE));
+	}
+
+	protected function logError(){
 
 	}
 
 	protected function clearOutputBuffer(){
 		while (ob_get_level()){
-			$this -> output .= ob_get_clean();
+			ob_end_clean();
 		}
 	}
 
-	protected function showPrettyOutput($exception){
+	protected function callPrettyController(){
 		$action = System::config(array('system', 'errorAction'));
 		$controller = System::config(array('system', 'errorController'));
 		$controller = Factory::controller($controller);
-
-		call_user_func_array(array($controller, $action), array($exception));
+		call_user_func_array(array($controller, $action), array($this -> exception));
 	}
 
-	protected function showRawOutput($exception){
+	protected function showPrettyOutput(){
+		if ($this -> isCritical()){
+			$this -> clearOutputBuffer();
+			$this -> callPrettyController();
+			$this -> shutdown();
+		}
+	}
+
+	protected function showRawOutput(){
+		$this -> clearOutputBuffer();
 		echo '<pre>';
 		echo 'Error Service<br>';
-		echo $exception -> getMessage(), '<br>';
+		echo $this -> exception -> getMessage(), '<br>';
 		echo '----------------<br>';
-		echo $exception -> getTraceAsString(), '<br>';
+		echo $this -> exception -> getTraceAsString(), '<br>';
 		echo '----------------<br>';
+
+		$this -> shutdown();
 	}
 
 	protected function shutdown(){

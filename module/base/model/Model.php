@@ -84,10 +84,11 @@ class Base_Model{
 
     public function setFields(array $fields){
         foreach($fields as $name => $value){
-            if (in_array($name, $this -> fields )){
-                $this -> $name = $value;
-            }
-        }
+            if (!in_array($name, $this -> fields )){
+				trigger_error('Can not find property `'. $name .'` in model `'. get_class($this) .'`');
+			}
+			$this -> $name = $value;
+		}
     }
 
     public function clearFields(){

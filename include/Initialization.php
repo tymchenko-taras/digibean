@@ -25,11 +25,16 @@ class Initialization {
 
 	public static function errorHandler($number, $string, $file, $line, array $context) {
 		$string .= ' in file ' . $file . ':' . $line;
-		Factory::service('Error') -> handle(new Exception($string, $number));
+		Factory::service('Error') -> handle(new Exception($string), $number);
+	}
+
+	public static function exceptionHandler(Exception $exception) {
+		Factory::service('Error') -> handle($exception, $exception -> getCode());
 	}
 }
 
 set_error_handler('Initialization::errorHandler');
+set_exception_handler('Initialization::exceptionHandler');
 spl_autoload_register('Initialization::loader');
 
 

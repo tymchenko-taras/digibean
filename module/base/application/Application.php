@@ -44,11 +44,7 @@ class Base_Application {
 	}
 
 	public function run(){
-        try {
-            $this -> test();
-            call_user_func_array(array($this -> getController(), $this -> actionName), $this -> params);
-        } catch (Exception $e){
-            Factory::service('Error') -> handle($e);
-        }
+		$this -> test();
+		call_user_func_array(array($this -> getController(), $this -> actionName), $this -> params);
 	}
 }
