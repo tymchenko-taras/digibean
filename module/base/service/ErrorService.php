@@ -7,12 +7,16 @@ class Base_ErrorService extends Base_Service{
 		$this -> exception = $exception;
 		$this -> errorType = $errorType;
 
-		if (System::isProduction()){
+		if ($this -> needToShowPretty()){
 			$this -> logError();
 			$this -> showPrettyOutput();
 		} else {
 			$this -> showRawOutput();
 		}
+	}
+
+	protected function needToShowPretty(){
+		return System::isProduction() || ($this -> exception -> getMessage() == 404);
 	}
 
 

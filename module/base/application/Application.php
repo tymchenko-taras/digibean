@@ -30,7 +30,7 @@ class Base_Application {
 		}
 	}
 
-	protected function test(){
+	protected function parseUrl(){
 		// TODO rename and pretty urls
 		$this -> getMcaByRoute(
 			$this -> getRouteByUrl(
@@ -44,7 +44,7 @@ class Base_Application {
 	}
 
 	public function run(){
-		$this -> test();
+		$this -> parseUrl();
 		call_user_func_array(array($this -> getController(), $this -> actionName), $this -> params);
 	}
 }
