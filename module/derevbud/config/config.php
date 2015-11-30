@@ -11,6 +11,7 @@ return array(
 		'routes' => array(
 			'/' => 'derevbud/index/index',
 			'site' => 'derevbud/index/index',
+			'product/<\d+>' => 'derevbud/index/product',
 			'base' => 'base/site/index',
 		)
     ),

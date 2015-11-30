@@ -11,13 +11,50 @@ class Base_Application {
 		return $this -> module;
 	}
 
-	protected function getUrl(){
+	protected function getCurrentUrl(){
 		$temp = UrlUtil::parse($_SERVER['REQUEST_URI']);
 		return $temp['path'];
 	}
 
-	protected function getRouteByUrl($url){
-		return System::config(array('url', 'routes', $url));
+	protected function getUglyByPretty($pretty){
+		return $pretty;
+	}
+
+	protected function getRouteByUgly($ugly){
+
+		$result = null;
+		$urls = System::config(array('url', 'routes'), array());
+		if(!empty($urls[ $ugly ])){
+			$result = $urls[ $ugly ];
+		}
+
+		if (!$result){
+			$ulyParts = explode('/', trim($ugly, '/'));
+			$uglyCount = count($ulyParts);
+			foreach($urls as $item => $route){
+				if( strpos($item, '<') !== false ){
+					$itemParts = explode('/', trim($item, '/'));
+					if (count($itemParts) != $uglyCount) continue;
+
+					$matched = false;
+					$params = array();
+					foreach($itemParts as $i => $part){
+						if($matched = preg_match(trim($part), $ulyParts[ $i ])){ // TODO test it, maybe need to add trim($part, '<>')
+							$params[] = $ulyParts[ $i ];
+						} else {
+							break;
+						}
+					}
+					if ($matched){
+						$this -> params = $params;
+						$result = $route;
+						break;
+					}
+				}
+			}
+		}
+
+		return $result;
 	}
 
 	protected function getMcaByRoute($route){
@@ -33,8 +70,10 @@ class Base_Application {
 	protected function parseUrl(){
 		// TODO rename and pretty urls
 		$this -> getMcaByRoute(
-			$this -> getRouteByUrl(
-				$this -> getUrl()
+			$this -> getRouteByUgly(
+				$this -> getUglyByPretty(
+					$this -> getCurrentUrl()
+				)
 			)
 		);
 	}
