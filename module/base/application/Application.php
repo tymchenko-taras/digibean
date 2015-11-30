@@ -39,10 +39,19 @@ class Base_Application {
 					$matched = false;
 					$params = array();
 					foreach($itemParts as $i => $part){
-						if($matched = preg_match(trim($part), $ulyParts[ $i ])){ // TODO test it, maybe need to add trim($part, '<>')
-							$params[] = $ulyParts[ $i ];
+						if(strpos($part, '<') !== false){
+							$part = '#'. trim($part, '><') .'#';
+							if($matched = preg_match($part, $ulyParts[ $i ])){ // TODO test it, maybe need to add trim($part, '<>')
+								$params[] = $ulyParts[ $i ];
+							} else {
+								break;
+							}
 						} else {
-							break;
+							if ($matched = ($part == $ulyParts[ $i ])){
+
+							} else {
+								break;
+							}
 						}
 					}
 					if ($matched){
@@ -79,6 +88,13 @@ class Base_Application {
 	}
 
 	public function getController(){
+		if(!$this -> controllerName){
+			throw new Exception(404);
+		}
+		if (!$this -> actionName){
+			throw new Exception();
+		}
+
 		return Factory::controller($this -> controllerName);
 	}
 
