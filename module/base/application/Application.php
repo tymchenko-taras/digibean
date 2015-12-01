@@ -23,13 +23,14 @@ class Base_Application {
 	protected function getRouteByUgly($ugly){
 
 		$result = null;
+		$ugly = trim($ugly, '/');
 		$urls = System::config(array('url', 'routes'), array());
 		if(!empty($urls[ $ugly ])){
 			$result = $urls[ $ugly ];
 		}
 
 		if (!$result){
-			$ulyParts = explode('/', trim($ugly, '/'));
+			$ulyParts = explode('/', $ugly);
 			$uglyCount = count($ulyParts);
 			foreach($urls as $item => $route){
 				if( strpos($item, '<') !== false ){
@@ -40,7 +41,7 @@ class Base_Application {
 					$params = array();
 					foreach($itemParts as $i => $part){
 						if(strpos($part, '<') !== false){
-							$part = '#'. trim($part, '><') .'#';
+							$part = '#^'. trim($part, '><') .'$#';
 							if($matched = preg_match($part, $ulyParts[ $i ])){ // TODO test it, maybe need to add trim($part, '<>')
 								$params[] = $ulyParts[ $i ];
 							} else {
