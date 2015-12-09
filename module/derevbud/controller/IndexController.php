@@ -25,6 +25,10 @@ class Derevbud_IndexController extends Base_Controller{
         ));
 	}
 
+	public function actionList(){
+		echo 'list';
+	}
+
 	public function actionProduct($productId = ''){
 		echo 'hello, this product action for product `'. $productId .'`';
 	}

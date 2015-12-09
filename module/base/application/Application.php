@@ -21,15 +21,13 @@ class Base_Application {
 	}
 
 	protected function getRouteByUgly($ugly){
-
-		$result = null;
 		$ugly = trim($ugly, '/');
+		$result = $ugly;
 		$urls = System::config(array('url', 'routes'), array());
+
 		if(!empty($urls[ $ugly ])){
 			$result = $urls[ $ugly ];
-		}
-
-		if (!$result){
+		} else {
 			$ulyParts = explode('/', $ugly);
 			$uglyCount = count($ulyParts);
 			foreach($urls as $item => $route){
@@ -58,7 +56,6 @@ class Base_Application {
 					if ($matched){
 						$this -> params = $params;
 						$result = $route;
-						break;
 					}
 				}
 			}
