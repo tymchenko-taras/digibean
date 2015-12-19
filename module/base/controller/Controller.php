@@ -5,7 +5,7 @@ class Base_Controller{
 
     public function __construct(){
 		//TODO remove derevbud from path
-        $this -> viewPath = BEAN_PROJECT_DIR .'/module/derevbud/view/';
+        $this -> viewPath = BEAN_PROJECT_DIR . '/module/derevbud/view/';
     }
 
     protected function renderPartial($view, $params = array(), $return = false){
