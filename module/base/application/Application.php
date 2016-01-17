@@ -49,7 +49,7 @@ class Base_Application {
 	protected function getRouteByUgly($ugly){
 		$ugly = trim($ugly, '/');
 		$result = $ugly;
-		$urls = System::app() -> config(array('url', 'routes'), array());
+		$urls = $this -> config(array('url', 'routes'), array());
 
 		if(!empty($urls[ $ugly ])){
 			$result = $urls[ $ugly ];
