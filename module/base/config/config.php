@@ -19,9 +19,9 @@ return array(
 	'services' => array(
 		'Error' => 'Base_ErrorService',
 	),
+
 	'validators' => array(
 		'required' => 'Base_RequiredValidator',
 		'string' => 'Base_StringValidator',
 	),
-
 );

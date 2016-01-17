@@ -13,7 +13,7 @@ class Factory{
 	protected static function get($name, $type = null){
 
         if (empty(static::$cache[ $type ][ $name ])){
-			if (!$class = System::config(array($type, $name))){
+			if (!$class = System::app() -> config(array($type, $name))){
 				$class = $name;
 			}
 
@@ -23,7 +23,10 @@ class Factory{
 	}
 
 	public static function application($name){
-		return static::get( $name, 'application' );
+        if (empty(static::$cache[ 'application' ][ $name ])){
+            static::$cache[ 'application' ][ $name ] = new $name;
+        }
+        return static::$cache[ 'application' ][ $name ];
 	}
 
 	public static function controller($name){

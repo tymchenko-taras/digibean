@@ -35,8 +35,8 @@ class Base_ErrorService extends Base_Service{
 	}
 
 	protected function callPrettyController(){
-		$action = System::config(array('system', 'errorAction'));
-		$controller = System::config(array('system', 'errorController'));
+		$action = System::app() -> config(array('system', 'errorAction'));
+		$controller = System::app() -> config(array('system', 'errorController'));
 		$controller = Factory::controller($controller);
 		call_user_func_array(array($controller, $action), array($this -> exception));
 	}

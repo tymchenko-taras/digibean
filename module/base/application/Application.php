@@ -4,12 +4,38 @@ class Base_Application {
 	protected $controllerName = '';
 	protected $actionName = '';
 	protected $controllerInstance = null;
+    // List of modules required for work(should be overridden in your endpoint module )
+	protected $modules = array();
+    protected static $config = null;
 
 	protected $params = array();
 
-	public function getModule(){
-		return $this -> module;
-	}
+    public function config($path = array(), $default = null){
+        $result = static::$config;
+        if (is_null ($result)){
+            foreach($this -> modules as $module){
+                $result = Util::arrayExtend(
+                    $result,
+                    require BEAN_PROJECT_DIR .'/module/'. strtolower($module) . '/config/config.php'
+                );
+            }
+            static::$config = $result;
+        }
+
+        if (!empty($path)){
+            $result = static::$config;
+            foreach($path as $key){
+                if (!empty($result[ $key ])){
+                    $result = $result[ $key ];
+                } else {
+                    $result = $default;
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
 
 	protected function getCurrentUrl(){
 		$temp = UrlUtil::parse($_SERVER['REQUEST_URI']);
@@ -23,7 +49,7 @@ class Base_Application {
 	protected function getRouteByUgly($ugly){
 		$ugly = trim($ugly, '/');
 		$result = $ugly;
-		$urls = System::config(array('url', 'routes'), array());
+		$urls = System::app() -> config(array('url', 'routes'), array());
 
 		if(!empty($urls[ $ugly ])){
 			$result = $urls[ $ugly ];
@@ -87,10 +113,10 @@ class Base_Application {
 
 	public function getController(){
 		if(!$this -> controllerName){
-			throw new Exception(404);
+			throw new Exception('Controller could not be found');
 		}
 		if (!$this -> actionName){
-			throw new Exception();
+			throw new Exception('Action could not be found');
 		}
 
 		return Factory::controller($this -> controllerName);

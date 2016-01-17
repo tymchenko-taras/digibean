@@ -8,5 +8,9 @@
  */
 
 class Derevbud_Application extends Base_Application{
-
+    protected $modules = array(
+        'Base',
+        'User',
+        'Derevbud',
+    );
 }

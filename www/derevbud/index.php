@@ -5,10 +5,4 @@ define('BEAN_LOG_START_TIME', microtime(1));
 
 require BEAN_PROJECT_DIR .'/include/Initialization.php';
 
-System::modules(array(
-    'Base',
-    'User',
-    'Derevbud',
-));
-
 System::app('Derevbud') -> run();

@@ -9,7 +9,7 @@ return array(
     'url' => array(
 		'someParam' => 'paramName',
 		'routes' => array(
-			'/' => 'derevbud/index/index',
+			'' => 'derevbud/index/index',
 			'site' => 'derevbud/index/index',
 			'product/<\d+>' => 'derevbud/index/product',
 			'base' => 'base/site/index',
